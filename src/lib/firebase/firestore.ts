@@ -1,10 +1,21 @@
-import { addDoc, collection, Firestore, onSnapshot } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  Firestore,
+  onSnapshot,
+} from "firebase/firestore";
 import { db } from "./clientApp";
 
 export type Flashcard = {
   word: string;
   definition: string;
 };
+
+export type FlashcardDisplay = {
+  id: string;
+} & Flashcard;
 
 export async function addFlashcard(db: Firestore, flashCard: Flashcard) {
   try {
@@ -15,12 +26,20 @@ export async function addFlashcard(db: Firestore, flashCard: Flashcard) {
   }
 }
 
-export function getFlashcards(cb: (flashcard: Flashcard[]) => void) {
+export function getFlashcards(cb: (flashcard: FlashcardDisplay[]) => void) {
   const unsub = onSnapshot(collection(db, "flashcards"), (collection) => {
-    const flashcards = collection.docs.map((doc) =>
-      doc.data(),
-    ) as unknown as Flashcard[];
+    const flashcards = collection.docs.map((doc) => {
+      const flashcard = doc.data() as Flashcard;
+      return {
+        ...flashcard,
+        id: doc.id,
+      };
+    }) as unknown as FlashcardDisplay[];
     cb(flashcards);
   });
   return unsub;
+}
+
+export async function deleteFlashcard(id: string) {
+  await deleteDoc(doc(db, "flashcards", id));
 }
