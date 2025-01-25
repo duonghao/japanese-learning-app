@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { db } from "@/lib/firebase/clientApp";
 import { addDeck, DeckDisplay, getDecks } from "@/lib/firebase/firestore";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Decks() {
@@ -42,7 +43,9 @@ export default function Decks() {
                 </CardHeader>
                 <CardFooter className="flex justify-between">
                   <Button variant="destructive">Delete</Button>
-                  <Button>Open</Button>
+                  <Button asChild>
+                    <Link href={`/decks/${deck.id}`}>View</Link>
+                  </Button>
                 </CardFooter>
               </Card>
             </li>
