@@ -1,5 +1,5 @@
-import Main from "@/components/main";
+import Decks from "./decks/page";
 
 export default function Home() {
-  return <Main />;
+  return <Decks />;
 }

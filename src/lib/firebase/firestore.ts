@@ -43,3 +43,36 @@ export function getFlashcards(cb: (flashcard: FlashcardDisplay[]) => void) {
 export async function deleteFlashcard(id: string) {
   await deleteDoc(doc(db, "flashcards", id));
 }
+
+export type Deck = {
+  name: string;
+  description: string;
+};
+
+export type DeckDisplay = {
+  id: string;
+} & Deck;
+
+export async function addDeck(db: Firestore, deck: Deck) {
+  try {
+    const docRef = await addDoc(collection(db, "decks"), deck);
+    console.log(`Flashcard written with id: ${docRef.id}`);
+  } catch (error) {
+    console.log("There was an error adding a flashcard.", error);
+  }
+}
+
+export function getDecks(cb: (flashcard: DeckDisplay[]) => void) {
+  const unsub = onSnapshot(collection(db, "decks"), (collection) => {
+    const decks = collection.docs.map((doc) => {
+      console.log(doc.data());
+      const deck = doc.data() as Deck;
+      return {
+        ...deck,
+        id: doc.id,
+      };
+    }) as unknown as DeckDisplay[];
+    cb(decks);
+  });
+  return unsub;
+}
