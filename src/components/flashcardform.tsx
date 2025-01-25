@@ -13,7 +13,7 @@ import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFlashcard } from "@/actions/handleFlashcardFormSubmit";
+import { createFlashcardInDeck } from "@/actions/handleFlashcardFormSubmit";
 import { useActionState } from "react";
 import { flashcardFormSchema } from "@/schemas/flashcardFormSchema";
 
@@ -21,11 +21,15 @@ const initialState = {
   message: "",
 };
 
-export default function FlashcardForm() {
+export default function FlashcardForm(props: { deckId: string }) {
+  const createFlashcardInDeckWithDeckID = createFlashcardInDeck.bind(null, {
+    deckId: props.deckId,
+  });
   const [state, formAction, pending] = useActionState(
-    createFlashcard,
+    createFlashcardInDeckWithDeckID,
     initialState,
   );
+
   const form = useForm<z.infer<typeof flashcardFormSchema>>({
     resolver: zodResolver(flashcardFormSchema),
     defaultValues: {

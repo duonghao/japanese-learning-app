@@ -1,12 +1,16 @@
 "use server";
 
-import { addFlashcard } from "@/lib/firebase/firestore";
+import { addFlashcardToDeck } from "@/lib/firebase/firestore";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
 import { flashcardFormSchema } from "@/schemas/flashcardFormSchema";
 import { getFirestore } from "firebase/firestore";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function createFlashcard(prevState: any, formData: FormData) {
+export async function createFlashcardInDeck(
+  context: { deckId: string },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
+  formData: FormData,
+) {
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
   const db = getFirestore(firebaseServerApp);
 
@@ -25,7 +29,7 @@ export async function createFlashcard(prevState: any, formData: FormData) {
 
   const { word, definition } = validatedFields.data;
 
-  await addFlashcard(db, {
+  await addFlashcardToDeck(db, context.deckId, {
     word,
     definition,
   });

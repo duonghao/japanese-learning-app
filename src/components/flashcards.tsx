@@ -3,7 +3,7 @@
 import {
   deleteFlashcard,
   FlashcardDisplay,
-  getFlashcards,
+  getFlashcardsFromDeck,
 } from "@/lib/firebase/firestore";
 import { useEffect, useState } from "react";
 import {
@@ -15,13 +15,16 @@ import {
 } from "@/components/ui/card";
 import { Button } from "./ui/button";
 
-export default function Flashcards() {
+export default function Flashcards(props: { deckId: string }) {
   const [flashcards, setFlashcards] = useState<FlashcardDisplay[] | null>(null);
 
   useEffect(() => {
-    const unsub = getFlashcards((flashcards) => setFlashcards(flashcards));
+    const unsub = getFlashcardsFromDeck(props.deckId, (flashcards) =>
+      setFlashcards(flashcards),
+    );
 
     return unsub;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
