@@ -53,8 +53,11 @@ export function getFlashcardsFromDeck(
   return unsub;
 }
 
-export async function deleteFlashcard(id: string) {
-  await deleteDoc(doc(db, "flashcards", id));
+export async function deleteFlashcardFromDeck(
+  deckId: string,
+  flashcardId: string,
+) {
+  await deleteDoc(doc(db, "decks", deckId, "flashcards", flashcardId));
 }
 
 export type Deck = {

@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  deleteFlashcard,
+  deleteFlashcardFromDeck,
   FlashcardDisplay,
   getFlashcardsFromDeck,
 } from "@/lib/firebase/firestore";
@@ -30,17 +30,19 @@ export default function Flashcards(props: { deckId: string }) {
   return (
     <div className="grid grid-cols-2 gap-4">
       {flashcards?.map((flashcard) => (
-        <Card key={flashcard.id} className="w-48 h-48">
+        <Card key={flashcard.id} className="w-[250px]">
           <CardHeader>
             <CardTitle>{flashcard.word}</CardTitle>
             <CardDescription>{flashcard.definition}</CardDescription>
           </CardHeader>
-          <CardFooter>
+          <CardFooter className="flex justify-end">
             <Button
               variant={"destructive"}
-              onClick={() => deleteFlashcard(flashcard.id)}
+              onClick={() =>
+                deleteFlashcardFromDeck(props.deckId, flashcard.id)
+              }
             >
-              X
+              Delete
             </Button>
           </CardFooter>
         </Card>
