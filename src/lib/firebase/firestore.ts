@@ -7,15 +7,8 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "./clientApp";
-
-export type Flashcard = {
-  word: string;
-  definition: string;
-};
-
-export type FlashcardDisplay = {
-  id: string;
-} & Flashcard;
+import { Flashcard, FlashcardDisplay } from "./types";
+import { collectionWithConverter } from "./utils";
 
 export async function addFlashcardToDeck(
   db: Firestore,
@@ -24,7 +17,7 @@ export async function addFlashcardToDeck(
 ) {
   try {
     const docRef = await addDoc(
-      collection(db, "decks", deckId, "flashcards"),
+      collectionWithConverter<Flashcard>(db, "decks", deckId, "flashcards"),
       flashCard,
     );
     console.log(`Flashcard written with id: ${docRef.id}`);
@@ -38,15 +31,16 @@ export function getFlashcardsFromDeck(
   cb: (flashcard: FlashcardDisplay[]) => void,
 ) {
   const unsub = onSnapshot(
-    collection(db, "decks", deckId, "flashcards"),
+    collectionWithConverter<FlashcardDisplay>(
+      db,
+      "decks",
+      deckId,
+      "flashcards",
+    ),
     (collection) => {
       const flashcards = collection.docs.map((doc) => {
-        const flashcard = doc.data() as Flashcard;
-        return {
-          ...flashcard,
-          id: doc.id,
-        };
-      }) as unknown as FlashcardDisplay[];
+        return doc.data();
+      });
       cb(flashcards);
     },
   );
@@ -71,9 +65,12 @@ export type DeckDisplay = {
 
 export async function addDeck(db: Firestore, deck: Deck) {
   try {
-    const docRef = await addDoc(collection(db, "decks"), deck);
+    const docRef = await addDoc(
+      collectionWithConverter<Deck>(db, "decks"),
+      deck,
+    );
     for (let i = 0; i < 5; i++) {
-      await addDoc(collection(docRef, "flashcards"), {
+      await addDoc(collectionWithConverter<Flashcard>(docRef, "flashcards"), {
         word: "Hello",
         definition: "Word",
       });
