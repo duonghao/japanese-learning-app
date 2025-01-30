@@ -28,10 +28,12 @@ export default function Decks() {
 
   return (
     <main>
-      <section>
-        <header className="flex justify-around">
-          <h2>Decks</h2>
-          <Button onClick={handleAddDeck}>+</Button>
+      <section className="px-4 py-4">
+        <header className="flex justify-between mb-4">
+          <h2 className="text-3xl font-bold tracking-tight">Decks</h2>
+          <div className="flex items-center space-x-2">
+            <Button onClick={handleAddDeck}>Add</Button>
+          </div>
         </header>
         <ul className="grid grid-cols-3">
           {decks?.map((deck) => (
