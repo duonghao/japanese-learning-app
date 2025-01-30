@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
-import Header from "@/components/header";
+import Header from "@/components/header/header";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
