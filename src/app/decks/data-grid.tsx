@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { DataTablePagination } from "./data-table-pagination";
 
 interface DataGridProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -62,7 +63,7 @@ export function DataGrid<TData, TValue>({
           className="max-w-sm"
         />
       </div>
-      <div className="rounded-md border grid grid-flow-row gap-4 grid-cols-5 p-4">
+      <div className="rounded-md border grid grid-flow-row gap-4 grid-cols-5 p-4 mb-4">
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map((row) => (
             <Card className="w-[250px]" key={row.id}>
@@ -82,24 +83,7 @@ export function DataGrid<TData, TValue>({
           <div className="h-24 text-center">No results.</div>
         )}
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div>
+      <DataTablePagination table={table} />
     </div>
   );
 }
