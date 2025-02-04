@@ -78,11 +78,11 @@ export function DataGrid<TData, TValue>({
             <Card className="w-[250px]" key={row.id}>
               <CardHeader>
                 <CardTitle>{row.getValue("name")}</CardTitle>
-                <CardDescription>{row.getValue("description")}</CardDescription>
+                <CardDescription>
+                  <Badge variant="outline">{row.getValue("tag")}</Badge>
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                <Badge variant="outline">{row.getValue("tag")}</Badge>
-              </CardContent>
+              <CardContent>{row.getValue("description")}</CardContent>
               <CardFooter className="flex justify-between">
                 <Button variant="destructive">Delete</Button>
                 <Button asChild>
