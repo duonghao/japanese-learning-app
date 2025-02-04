@@ -5,6 +5,7 @@ import {
   ColumnFiltersState,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -31,13 +32,20 @@ export function DataGrid<TData, TValue>({
   data,
 }: DataGridProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0, //initial page index
+    pageSize: 15, //default page size
+  });
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
     state: {
+      pagination,
       columnFilters,
     },
   });
@@ -54,7 +62,7 @@ export function DataGrid<TData, TValue>({
           className="max-w-sm"
         />
       </div>
-      <div className="rounded-md border grid grid-flow-col gap-4 grid-cols-5 p-4">
+      <div className="rounded-md border grid grid-flow-row gap-4 grid-cols-5 p-4">
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map((row) => (
             <Card className="w-[250px]" key={row.id}>
@@ -73,6 +81,24 @@ export function DataGrid<TData, TValue>({
         ) : (
           <div className="h-24 text-center">No results.</div>
         )}
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
       </div>
     </div>
   );
