@@ -6,6 +6,7 @@ export type Flashcard = {
 export type Deck = {
   name: string;
   description: string;
+  tag: string;
 };
 
 type Display<T> = T & {

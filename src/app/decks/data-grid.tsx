@@ -15,6 +15,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+  CardContent,
 } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,9 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { DataTablePagination } from "./data-table-pagination";
+import { DataTableFacetedFilter } from "./data-table-faceted-filter";
+import { tags } from "./data";
+import { Badge } from "@/components/ui/badge";
 
 interface DataGridProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -53,7 +57,7 @@ export function DataGrid<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-4">
         <Input
           placeholder="Filter by name..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -61,6 +65,11 @@ export function DataGrid<TData, TValue>({
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
+        />
+        <DataTableFacetedFilter
+          column={table.getColumn("tag")}
+          title={"Tags"}
+          options={tags}
         />
       </div>
       <div className="rounded-md border grid grid-flow-row gap-4 grid-cols-5 p-4 mb-4">
@@ -71,6 +80,9 @@ export function DataGrid<TData, TValue>({
                 <CardTitle>{row.getValue("name")}</CardTitle>
                 <CardDescription>{row.getValue("description")}</CardDescription>
               </CardHeader>
+              <CardContent>
+                <Badge variant="outline">{row.getValue("tag")}</Badge>
+              </CardContent>
               <CardFooter className="flex justify-between">
                 <Button variant="destructive">Delete</Button>
                 <Button asChild>

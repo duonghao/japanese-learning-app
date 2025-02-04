@@ -16,4 +16,8 @@ export const columns: ColumnDef<DeckDisplay>[] = [
     accessorKey: "id",
     header: "ID",
   },
+  {
+    accessorKey: "tag",
+    header: "Tag",
+  },
 ];
