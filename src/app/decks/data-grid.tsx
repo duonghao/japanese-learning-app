@@ -72,27 +72,31 @@ export function DataGrid<TData, TValue>({
           title={"Tags"}
         />
       </div>
-      <div className="rounded-xl border grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 mb-4">
+      <div className="rounded-xl border p-4 mb-4 min-h-screen">
         {table.getRowModel().rows?.length ? (
-          table.getRowModel().rows.map((row) => (
-            <Card key={row.id}>
-              <CardHeader>
-                <CardTitle>{row.getValue("name")}</CardTitle>
-                <CardDescription>
-                  <Badge variant="outline">{row.getValue("tag")}</Badge>
-                </CardDescription>
-              </CardHeader>
-              <CardContent>{row.getValue("description")}</CardContent>
-              <CardFooter className="flex justify-between">
-                <Button variant="destructive">Delete</Button>
-                <Button asChild>
-                  <Link href={`/decks/${row.getValue("id")}`}>View</Link>
-                </Button>
-              </CardFooter>
-            </Card>
-          ))
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {table.getRowModel().rows.map((row) => (
+              <Card key={row.id}>
+                <CardHeader>
+                  <CardTitle>{row.getValue("name")}</CardTitle>
+                  <CardDescription>
+                    <Badge variant="outline">{row.getValue("tag")}</Badge>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>{row.getValue("description")}</CardContent>
+                <CardFooter className="flex justify-between">
+                  <Button variant="destructive">Delete</Button>
+                  <Button asChild>
+                    <Link href={`/decks/${row.getValue("id")}`}>View</Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
         ) : (
-          <div className="h-24 text-center">No results.</div>
+          <div className="flex justify-center items-center">
+            <div>No results.</div>
+          </div>
         )}
       </div>
       <DataTablePagination table={table} />
