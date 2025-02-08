@@ -89,7 +89,7 @@ export function DataGrid<TData, TValue>({
                 </CardHeader>
                 <CardContent>{row.getValue("description")}</CardContent>
                 <CardFooter className="flex justify-between">
-                  <Button asChild>
+                  <Button asChild variant="outline">
                     <Link href={`/decks/${row.getValue("id")}`}>View</Link>
                   </Button>
                 </CardFooter>
