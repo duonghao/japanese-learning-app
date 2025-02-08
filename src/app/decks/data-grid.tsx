@@ -40,7 +40,7 @@ export function DataGrid<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState({
     pageIndex: 0, //initial page index
-    pageSize: 15, //default page size
+    pageSize: 10, //default page size
   });
   const table = useReactTable({
     data,
