@@ -57,8 +57,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                     {selectedValues.size} selected
                   </Badge>
                 ) : (
-                  facets
-                    ?.keys()
+                  Array.from(facets?.keys() ?? [])
                     .filter((facet) => selectedValues.has(facet))
                     .map((facet) => (
                       <Badge
@@ -81,7 +80,7 @@ export function DataTableFacetedFilter<TData, TValue>({
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
-              {facets?.keys().map((facet) => {
+              {Array.from(facets?.keys() ?? []).map((facet) => {
                 const isSelected = selectedValues.has(facet);
                 console.log(facet);
                 return (
@@ -111,7 +110,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                     </div>
                     <span>{facet}</span>
                     <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
-                      {facets.get(facet)}
+                      {facets?.get(facet)}
                     </span>
                   </CommandItem>
                 );
