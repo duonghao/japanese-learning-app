@@ -26,6 +26,7 @@ import { useState } from "react";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 import { Badge } from "@/components/ui/badge";
+import DeckToolbar from "./deck-toolbar";
 
 interface DataGridProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -58,19 +59,22 @@ export function DataGrid<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4 gap-4">
-        <Input
-          placeholder="Filter by name..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <DataTableFacetedFilter
-          column={table.getColumn("tag")}
-          title={"Tags"}
-        />
+      <div className="flex justify-between py-4">
+        <div className="flex items-center gap-4">
+          <Input
+            placeholder="Filter by name..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <DataTableFacetedFilter
+            column={table.getColumn("tag")}
+            title={"Tags"}
+          />
+        </div>
+        <DeckToolbar />
       </div>
       <div className="rounded-xl border p-4 mb-4 min-h-screen">
         {table.getRowModel().rows?.length ? (
