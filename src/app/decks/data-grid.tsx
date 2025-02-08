@@ -6,6 +6,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getFacetedUniqueValues,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -24,7 +25,6 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
-import { tags } from "./data";
 import { Badge } from "@/components/ui/badge";
 
 interface DataGridProps<TData, TValue> {
@@ -49,6 +49,7 @@ export function DataGrid<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     state: {
       pagination,
       columnFilters,
@@ -69,7 +70,6 @@ export function DataGrid<TData, TValue>({
         <DataTableFacetedFilter
           column={table.getColumn("tag")}
           title={"Tags"}
-          options={tags}
         />
       </div>
       <div className="rounded-md border grid grid-flow-row gap-4 grid-cols-5 p-4 mb-4">

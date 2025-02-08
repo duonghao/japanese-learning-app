@@ -24,17 +24,11 @@ import { Separator } from "@/components/ui/separator";
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
   title?: string;
-  options: {
-    label: string;
-    value: string;
-    icon?: React.ComponentType<{ className?: string }>;
-  }[];
 }
 
 export function DataTableFacetedFilter<TData, TValue>({
   column,
   title,
-  options,
 }: DataTableFacetedFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
   const selectedValues = new Set(column?.getFilterValue() as string[]);
@@ -63,15 +57,16 @@ export function DataTableFacetedFilter<TData, TValue>({
                     {selectedValues.size} selected
                   </Badge>
                 ) : (
-                  options
-                    .filter((option) => selectedValues.has(option.value))
-                    .map((option) => (
+                  facets
+                    ?.keys()
+                    .filter((facet) => selectedValues.has(facet))
+                    .map((facet) => (
                       <Badge
                         variant="secondary"
-                        key={option.value}
+                        key={facet}
                         className="rounded-sm px-1 font-normal"
                       >
-                        {option.label}
+                        {facet}
                       </Badge>
                     ))
                 )}
@@ -86,16 +81,18 @@ export function DataTableFacetedFilter<TData, TValue>({
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
-              {options.map((option) => {
-                const isSelected = selectedValues.has(option.value);
+              {facets?.keys().map((facet) => {
+                if (!facet) return;
+
+                const isSelected = selectedValues.has(facet);
                 return (
                   <CommandItem
-                    key={option.value}
+                    key={facet}
                     onSelect={() => {
                       if (isSelected) {
-                        selectedValues.delete(option.value);
+                        selectedValues.delete(facet);
                       } else {
-                        selectedValues.add(option.value);
+                        selectedValues.add(facet);
                       }
                       const filterValues = Array.from(selectedValues);
                       column?.setFilterValue(
@@ -113,15 +110,10 @@ export function DataTableFacetedFilter<TData, TValue>({
                     >
                       <Check />
                     </div>
-                    {option.icon && (
-                      <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
-                    <span>{option.label}</span>
-                    {facets?.get(option.value) && (
-                      <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
-                        {facets.get(option.value)}
-                      </span>
-                    )}
+                    <span>{facet}</span>
+                    <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
+                      {facets.get(facet)}
+                    </span>
                   </CommandItem>
                 );
               })}
