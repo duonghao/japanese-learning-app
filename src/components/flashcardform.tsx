@@ -15,7 +15,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFlashcardInDeck } from "@/actions/handleFlashcardFormSubmit";
 import { useActionState } from "react";
-import { flashcardFormSchema } from "@/schemas/flashcardFormSchema";
+import { flashcardFormSchema } from "@/schemas";
 
 const initialState = {
   message: "",

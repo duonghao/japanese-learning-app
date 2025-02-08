@@ -2,7 +2,7 @@
 
 import { addFlashcardToDeck } from "@/lib/firebase/firestore";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
-import { flashcardFormSchema } from "@/schemas/flashcardFormSchema";
+import { flashcardFormSchema } from "@/schemas";
 import { getFirestore } from "firebase/firestore";
 
 export async function createFlashcardInDeck(
