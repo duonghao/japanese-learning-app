@@ -72,10 +72,10 @@ export function DataGrid<TData, TValue>({
           title={"Tags"}
         />
       </div>
-      <div className="rounded-md border grid grid-flow-row gap-4 grid-cols-5 p-4 mb-4">
+      <div className="rounded-xl border grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 mb-4">
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map((row) => (
-            <Card className="w-[250px]" key={row.id}>
+            <Card key={row.id}>
               <CardHeader>
                 <CardTitle>{row.getValue("name")}</CardTitle>
                 <CardDescription>
