@@ -82,9 +82,8 @@ export function DataTableFacetedFilter<TData, TValue>({
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
               {facets?.keys().map((facet) => {
-                if (!facet) return;
-
                 const isSelected = selectedValues.has(facet);
+                console.log(facet);
                 return (
                   <CommandItem
                     key={facet}

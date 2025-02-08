@@ -19,5 +19,6 @@ export const columns: ColumnDef<DeckDisplay>[] = [
   {
     accessorKey: "tag",
     header: "Tag",
+    accessorFn: (row) => row.tag ?? "default",
   },
 ];
