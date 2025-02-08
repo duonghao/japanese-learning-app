@@ -2,16 +2,21 @@
 
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/firebase/clientApp";
-import { addDeck, DeckDisplay, getDecks } from "@/lib/firebase/firestore";
+import { addDeck, getDecks } from "@/lib/firebase/firestore";
 import { useEffect, useState } from "react";
 import { DataGrid } from "./data-grid";
 import { columns } from "./columns";
+import { DeckDisplay } from "@/lib/firebase/types";
 
 export default function Decks() {
   const [decks, setDecks] = useState<DeckDisplay[] | null>(null);
 
   async function handleAddDeck() {
-    await addDeck(db, { name: "Test", description: "This is a test deck." });
+    await addDeck(db, {
+      name: "Test",
+      description: "This is a test deck.",
+      tag: "test",
+    });
   }
 
   useEffect(() => {

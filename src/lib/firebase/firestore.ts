@@ -9,6 +9,7 @@ import {
 import { db } from "./clientApp";
 import { Flashcard, FlashcardDisplay } from "./types";
 import { collectionWithConverter } from "./utils";
+import { type Deck, DeckDisplay } from "./types";
 
 export async function addFlashcardToDeck(
   db: Firestore,
@@ -53,15 +54,6 @@ export async function deleteFlashcardFromDeck(
 ) {
   await deleteDoc(doc(db, "decks", deckId, "flashcards", flashcardId));
 }
-
-export type Deck = {
-  name: string;
-  description: string;
-};
-
-export type DeckDisplay = {
-  id: string;
-} & Deck;
 
 export async function addDeck(db: Firestore, deck: Deck) {
   try {
