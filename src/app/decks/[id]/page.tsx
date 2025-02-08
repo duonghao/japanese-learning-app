@@ -1,4 +1,4 @@
-import FlashcardForm from "@/components/flashcardform";
+import FlashcardForm from "@/components/forms/flashcard-form";
 import Flashcards from "@/components/flashcards";
 
 export default async function DeckPage({
