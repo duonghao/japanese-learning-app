@@ -80,7 +80,7 @@ export function DataGrid<TData, TValue>({
                 <CardHeader>
                   <CardTitle>{row.getValue("name")}</CardTitle>
                   <CardDescription>
-                    <Badge variant="outline">{row.getValue("tag")}</Badge>
+                    <Badge variant="secondary">{row.getValue("tag")}</Badge>
                   </CardDescription>
                 </CardHeader>
                 <CardContent>{row.getValue("description")}</CardContent>
