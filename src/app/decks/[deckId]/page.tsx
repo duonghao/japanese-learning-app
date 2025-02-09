@@ -4,18 +4,18 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 import { getDeck } from "@/lib/firebase/firestore";
-
 import { DeckDisplay } from "@/lib/firebase/types";
+
 import FlashcardForm from "@/components/forms/flashcard-form";
 import Flashcards from "@/components/flashcards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function DeckPage() {
-  const { id } = useParams<{ id: string }>();
+  const { deckId } = useParams<{ deckId: string }>();
   const [deck, setDeck] = useState<DeckDisplay | undefined>(undefined);
 
   useEffect(() => {
-    const unsub = getDeck(id, (deck) => setDeck(deck));
+    const unsub = getDeck(deckId, (deck) => setDeck(deck));
 
     return unsub;
   });
@@ -32,23 +32,37 @@ export default function DeckPage() {
           <TabsTrigger value="flashcards">Flashcards</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
-          <div className="min-h-svh flex justify-center items-center">
-            Overview
-          </div>
+          <OverviewTab />
         </TabsContent>
         <TabsContent value="flashcards">
-          <div className="grid min-h-svh grid-cols-2 rounded-xl border">
-            <div className="flex flex-1 items-center justify-center">
-              <div className="w-full max-w-xs">
-                <FlashcardForm deckId={id} />
-              </div>
-            </div>
-            <div className="bg-muted">
-              <Flashcards deckId={id} />
-            </div>
-          </div>
+          <FlashcardsTab deckId={deckId} />
         </TabsContent>
       </Tabs>
     </section>
+  );
+}
+
+function OverviewTab() {
+  return (
+    <div className="min-h-svh flex justify-center items-center">Overview</div>
+  );
+}
+
+interface FlashcardsTabProps {
+  deckId: string;
+}
+
+function FlashcardsTab({ deckId }: FlashcardsTabProps) {
+  return (
+    <div className="grid min-h-svh grid-cols-2 rounded-xl border">
+      <div className="flex flex-1 items-center justify-center">
+        <div className="w-full max-w-xs">
+          <FlashcardForm deckId={deckId} />
+        </div>
+      </div>
+      <div className="bg-muted">
+        <Flashcards deckId={deckId} />
+      </div>
+    </div>
   );
 }
