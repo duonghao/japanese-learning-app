@@ -1,6 +1,8 @@
+import Link from "next/link";
+
 import { DeckDisplay } from "@/lib/firebase/types";
 
-import { Table } from "@tanstack/react-table";
+import { Row, Table } from "@tanstack/react-table";
 
 import {
   Dialog,
@@ -20,7 +22,15 @@ import {
   DataGridToolbar,
 } from "@/components/data-grid/data-grid";
 import { Input } from "@/components/ui/input";
-
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { columns } from "@/components/decks-grid/columns";
 
 function DecksActionsToolbar() {
@@ -47,7 +57,6 @@ function DecksActionsToolbar() {
 interface DecksFiltersToolbarProps<TData> {
   table: Table<TData>;
 }
-
 function DecksFiltersToolbar<TData>({
   table,
 }: DecksFiltersToolbarProps<TData>) {
@@ -66,10 +75,31 @@ function DecksFiltersToolbar<TData>({
   );
 }
 
+interface DeckCardProps<TData> {
+  row: Row<TData>;
+}
+function DeckCard<TData>({ row }: DeckCardProps<TData>) {
+  return (
+    <Card key={row.id}>
+      <CardHeader>
+        <CardTitle>{row.getValue("name")}</CardTitle>
+        <CardDescription>
+          <Badge variant="secondary">{row.getValue("tag")}</Badge>
+        </CardDescription>
+      </CardHeader>
+      <CardContent>{row.getValue("description")}</CardContent>
+      <CardFooter className="flex justify-between">
+        <Button asChild variant="outline">
+          <Link href={`/decks/${row.getValue("id")}`}>View</Link>
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}
+
 interface DecksGridProps {
   decks: DeckDisplay[] | null;
 }
-
 export default function DecksGrid({ decks }: DecksGridProps) {
   return (
     <DataGrid data={decks ?? []} columns={columns}>
@@ -83,7 +113,7 @@ export default function DecksGrid({ decks }: DecksGridProps) {
           );
         }}
       </DataGridToolbar>
-      <DataGridContent />
+      <DataGridContent>{(row) => <DeckCard row={row} />}</DataGridContent>
       <DataGridPagination />
     </DataGrid>
   );

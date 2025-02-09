@@ -7,9 +7,8 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "./clientApp";
-import { Flashcard, FlashcardDisplay } from "./types";
+import { Flashcard, FlashcardDisplay, Deck, DeckDisplay } from "./types";
 import { collectionWithConverter, docWithConverter } from "./utils";
-import { type Deck, DeckDisplay } from "./types";
 
 export async function addFlashcardToDeck(
   db: Firestore,

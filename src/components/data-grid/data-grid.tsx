@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useState, ReactNode, useContext } from "react";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 import {
@@ -14,6 +13,7 @@ import {
   getFacetedUniqueValues,
   useReactTable,
   Table,
+  Row,
 } from "@tanstack/react-table";
 
 import {
@@ -25,14 +25,6 @@ import {
   PlusCircle,
 } from "lucide-react";
 
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -121,30 +113,19 @@ function DataGridToolbar<TData>({ children }: DataGridToolbarProps<TData>) {
   return children(table);
 }
 
-function DataGridContent<TData>() {
+interface DataGridContentProps<TData> {
+  children: (row: Row<TData>) => ReactNode;
+}
+
+function DataGridContent<TData>({ children }: DataGridContentProps<TData>) {
   const { table } = useDataGrid<TData>();
 
   return (
     <div>
-      <div className="rounded-xl border p-4 mb-4 min-h-screen">
+      <div className="rounded-xl border p-4 mb-4 min-h-screen bg-muted">
         {table.getRowModel().rows?.length ? (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {table.getRowModel().rows.map((row) => (
-              <Card key={row.id}>
-                <CardHeader>
-                  <CardTitle>{row.getValue("name")}</CardTitle>
-                  <CardDescription>
-                    <Badge variant="secondary">{row.getValue("tag")}</Badge>
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>{row.getValue("description")}</CardContent>
-                <CardFooter className="flex justify-between">
-                  <Button asChild variant="outline">
-                    <Link href={`/decks/${row.getValue("id")}`}>View</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+            {table.getRowModel().rows.map((row) => children(row))}
           </div>
         ) : (
           <div className="flex justify-center items-center">

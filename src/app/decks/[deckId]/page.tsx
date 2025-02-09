@@ -54,13 +54,13 @@ interface FlashcardsTabProps {
 
 function FlashcardsTab({ deckId }: FlashcardsTabProps) {
   return (
-    <div className="grid min-h-svh grid-cols-2 rounded-xl border">
-      <div className="flex flex-1 items-center justify-center">
+    <div className="grid min-h-svh gap-4 grid-cols-2 rounded-xl border p-4">
+      <div className="flex flex-1 items-center justify-center rounded-xl border">
         <div className="w-full max-w-xs">
           <FlashcardForm deckId={deckId} />
         </div>
       </div>
-      <div className="bg-muted">
+      <div className="rounded-xl border p-4">
         <Flashcards deckId={deckId} />
       </div>
     </div>
