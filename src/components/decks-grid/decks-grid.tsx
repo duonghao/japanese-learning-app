@@ -73,8 +73,8 @@ interface DecksGridProps {
 export default function DecksGrid({ decks }: DecksGridProps) {
   return (
     <DataGrid data={decks ?? []} columns={columns}>
-      <DataGridToolbar
-        renderActions={(table) => {
+      <DataGridToolbar>
+        {(table) => {
           return (
             <div className="flex justify-between py-4">
               <DecksFiltersToolbar table={table} />
@@ -82,7 +82,7 @@ export default function DecksGrid({ decks }: DecksGridProps) {
             </div>
           );
         }}
-      ></DataGridToolbar>
+      </DataGridToolbar>
       <DataGridContent />
       <DataGridPagination />
     </DataGrid>

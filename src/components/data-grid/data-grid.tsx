@@ -112,15 +112,13 @@ function DataGrid<TData, TValue>({
 }
 
 interface DataGridToolbarProps<TData> {
-  renderActions: (table: Table<TData>) => ReactNode;
+  children: (table: Table<TData>) => ReactNode;
 }
 
-function DataGridToolbar<TData>({
-  renderActions,
-}: DataGridToolbarProps<TData>) {
+function DataGridToolbar<TData>({ children }: DataGridToolbarProps<TData>) {
   const { table } = useDataGrid<TData>();
 
-  return renderActions(table);
+  return children(table);
 }
 
 function DataGridContent<TData>() {
