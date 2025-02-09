@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": " npm run build-service-worker:js && next build",
+    "dev": "npm run build-service-worker:js && next dev",
+    "build": "npm run build-service-worker:js && next build",
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
