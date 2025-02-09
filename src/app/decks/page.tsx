@@ -1,10 +1,11 @@
 "use client";
 
-import { getDecks } from "@/lib/firebase/firestore";
 import { useEffect, useState } from "react";
-import { DataGrid } from "./data-grid";
-import { columns } from "./columns";
+
+import { getDecks } from "@/lib/firebase/firestore";
 import { DeckDisplay } from "@/lib/firebase/types";
+
+import DecksGrid from "@/components/decks-grid/decks-grid";
 
 export default function Decks() {
   const [decks, setDecks] = useState<DeckDisplay[] | null>(null);
@@ -20,7 +21,7 @@ export default function Decks() {
         <header className="flex justify-between mb-4">
           <h2 className="text-3xl font-bold tracking-tight">Decks</h2>
         </header>
-        <DataGrid data={decks ?? []} columns={columns} />
+        <DecksGrid decks={decks} />
       </section>
     </main>
   );
