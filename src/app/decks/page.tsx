@@ -16,7 +16,7 @@ export default function Decks() {
 
   return (
     <main>
-      <section className="px-4 py-4">
+      <section className="p-4">
         <header className="flex justify-between mb-4">
           <h2 className="text-3xl font-bold tracking-tight">Decks</h2>
         </header>

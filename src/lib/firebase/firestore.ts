@@ -8,7 +8,7 @@ import {
 } from "firebase/firestore";
 import { db } from "./clientApp";
 import { Flashcard, FlashcardDisplay } from "./types";
-import { collectionWithConverter } from "./utils";
+import { collectionWithConverter, docWithConverter } from "./utils";
 import { type Deck, DeckDisplay } from "./types";
 
 export async function addFlashcardToDeck(
@@ -85,5 +85,19 @@ export function getDecks(cb: (flashcard: DeckDisplay[]) => void) {
     }) as unknown as DeckDisplay[];
     cb(decks);
   });
+  return unsub;
+}
+
+export function getDeck(
+  id: string,
+  cb: (deck: DeckDisplay | undefined) => void,
+) {
+  const unsub = onSnapshot(
+    docWithConverter<DeckDisplay>(db, "decks", id),
+    (doc) => {
+      const deck = doc.data();
+      cb(deck);
+    },
+  );
   return unsub;
 }

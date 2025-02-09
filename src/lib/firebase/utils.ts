@@ -1,5 +1,6 @@
 import {
   collection,
+  doc,
   DocumentData,
   DocumentReference,
   Firestore,
@@ -36,4 +37,16 @@ export function collectionWithConverter<T extends DocumentData>(
   }
 
   return collection(ref, path, ...pathSegments).withConverter(converter<T>());
+}
+
+export function docWithConverter<T extends DocumentData>(
+  ref: Firestore | DocumentReference<DocumentData, DocumentData>,
+  path: string,
+  ...pathSegments: string[]
+) {
+  if (ref instanceof Firestore) {
+    return doc(ref, path, ...pathSegments).withConverter(converter<T>());
+  }
+
+  return doc(ref, path, ...pathSegments).withConverter(converter<T>());
 }
