@@ -52,6 +52,7 @@ import { Separator } from "@/components/ui/separator";
 
 interface DataGridContext<TData> {
   table: Table<TData>;
+  name: string;
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataGridContext = createContext<DataGridContext<any>>(undefined as any);
@@ -66,12 +67,14 @@ const useDataGrid = <T,>() => {
 };
 
 interface DataGridProps<TData, TValue> {
+  name: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   children: ReactNode;
 }
 
 function DataGrid<TData, TValue>({
+  name,
   columns,
   data,
   children,
@@ -97,7 +100,7 @@ function DataGrid<TData, TValue>({
   });
 
   return (
-    <DataGridContext.Provider value={{ table }}>
+    <DataGridContext.Provider value={{ table, name }}>
       {children}
     </DataGridContext.Provider>
   );
@@ -138,16 +141,18 @@ function DataGridContent<TData>({ children }: DataGridContentProps<TData>) {
 }
 
 function DataGridPagination<TData>() {
-  const { table } = useDataGrid<TData>();
+  const { table, name } = useDataGrid<TData>();
 
   return (
     <div className="flex items-center justify-between">
       <div className="flex-1 text-sm text-muted-foreground">
-        {table.getFilteredRowModel().rows.length} deck(s)
+        {table.getFilteredRowModel().rows.length} {name}(s)
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">Decks per page</p>
+          <p className="text-sm font-medium">
+            <p className="capitalize inline">{name}</p> per page
+          </p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {

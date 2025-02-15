@@ -75,7 +75,7 @@ export default function FlashcardsGrid({
   deckId,
 }: FlashcardsGridProps) {
   return (
-    <DataGrid data={flashcards ?? []} columns={columns}>
+    <DataGrid name="flashcard" data={flashcards ?? []} columns={columns}>
       <DataGridToolbar>
         {(table) => {
           return (

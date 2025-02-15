@@ -102,7 +102,7 @@ interface DecksGridProps {
 }
 export default function DecksGrid({ decks }: DecksGridProps) {
   return (
-    <DataGrid data={decks ?? []} columns={columns}>
+    <DataGrid name="deck" data={decks ?? []} columns={columns}>
       <DataGridToolbar>
         {(table) => {
           return (
