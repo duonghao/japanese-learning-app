@@ -48,7 +48,7 @@ interface FlashcardCardProps<TData> {
 }
 function FlashcardCard<TData>({ row, deckId }: FlashcardCardProps<TData>) {
   return (
-    <Card key={row.id} className="w-[250px]">
+    <Card key={row.id}>
       <CardHeader>
         <CardTitle>{row.getValue("word")}</CardTitle>
         <CardDescription>{row.getValue("definition")}</CardDescription>
@@ -79,7 +79,7 @@ export default function FlashcardsGrid({
       <DataGridToolbar>
         {(table) => {
           return (
-            <div className="flex justify-between py-4">
+            <div className="flex justify-between pb-4">
               <FlashcardsFiltersToolbar table={table} />
             </div>
           );
