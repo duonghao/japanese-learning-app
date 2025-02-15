@@ -9,6 +9,8 @@ import { DeckDisplay } from "@/lib/firebase/types";
 import FlashcardForm from "@/components/forms/flashcard-form";
 import Flashcards from "@/components/flashcards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function DeckPage() {
   const { deckId } = useParams<{ deckId: string }>();
@@ -22,9 +24,16 @@ export default function DeckPage() {
 
   return (
     <section className="p-4">
-      <header className="flex flex-col mb-4">
-        <h2 className="text-3xl font-bold tracking-tight">{deck?.name}</h2>
-        <p className="text-muted-foreground">{deck?.description}</p>
+      <header className="flex justify-between items-center mb-4">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight">{deck?.name}</h2>
+          <p className="text-muted-foreground">{deck?.description}</p>
+        </div>
+        <ul>
+          <Button asChild>
+            <Link href={`/decks/start/${deckId}`}>Start</Link>
+          </Button>
+        </ul>
       </header>
       <Tabs defaultValue="flashcards">
         <TabsList className="grid grid-cols-2 w-[400px]">
