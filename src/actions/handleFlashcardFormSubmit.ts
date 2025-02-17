@@ -3,7 +3,7 @@
 import { addFlashcardToDeck } from "@/lib/firebase/firestore";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
 import { flashcardFormSchema } from "@/schemas";
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore } from "firebase/firestore";
 
 export async function createFlashcardInDeck(
   context: { deckId: string },
@@ -12,7 +12,9 @@ export async function createFlashcardInDeck(
   formData: FormData,
 ) {
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
-  const db = getFirestore(firebaseServerApp);
+  const db = initializeFirestore(firebaseServerApp, {
+    ignoreUndefinedProperties: true,
+  });
 
   const validatedFields = flashcardFormSchema.safeParse({
     word: formData.get("word"),

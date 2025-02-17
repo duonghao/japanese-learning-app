@@ -6,10 +6,17 @@ import {
   Firestore,
   QueryDocumentSnapshot,
   SnapshotOptions,
+  Timestamp,
   WithFieldValue,
 } from "firebase/firestore";
 
-const converter = <T>() => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isFirebaseTimestamp(value: any): value is Timestamp {
+  return !!value?.toDate;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const converter = <T extends Record<string, any>>() => {
   return {
     toFirestore(data: WithFieldValue<T>) {
       return data;
@@ -19,6 +26,13 @@ const converter = <T>() => {
       options: SnapshotOptions,
     ) => {
       const data = snapshot.data(options);
+
+      // Convert timestamp to date
+      (Object.keys(data) as (keyof T)[]).forEach(function (key) {
+        const v = data[key];
+        data[key] = isFirebaseTimestamp(v) ? v.toDate() : v;
+      });
+
       return {
         ...data,
         id: snapshot.id,

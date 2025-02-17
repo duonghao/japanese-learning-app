@@ -4,11 +4,23 @@ import {
   deleteDoc,
   doc,
   Firestore,
+  getDocs,
   onSnapshot,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "./clientApp";
-import { Flashcard, FlashcardDisplay, Deck, DeckDisplay } from "./types";
+import {
+  Flashcard,
+  FlashcardDisplay,
+  Deck,
+  DeckDisplay,
+  FlashcardProps,
+  FlashcardPropsDisplay,
+  FlashcardLog,
+} from "./types";
 import { collectionWithConverter, docWithConverter } from "./utils";
+
+import { createEmptyCard } from "ts-fsrs";
 
 export async function addFlashcardToDeck(
   db: Firestore,
@@ -16,13 +28,96 @@ export async function addFlashcardToDeck(
   flashCard: Flashcard,
 ) {
   try {
-    const docRef = await addDoc(
+    const flashcardRef = await addDoc(
       collectionWithConverter<Flashcard>(db, "decks", deckId, "flashcards"),
       flashCard,
     );
-    console.log(`Flashcard written with id: ${docRef.id}`);
+
+    const props = createEmptyCard();
+
+    await addDoc(
+      collectionWithConverter<FlashcardProps>(
+        db,
+        "decks",
+        deckId,
+        "flashcards",
+        flashcardRef.id,
+        "props",
+      ),
+      props,
+    );
   } catch (error) {
     console.log("There was an error adding a flashcard.", error);
+  }
+}
+
+export async function getFlashcardProps(deckId: string, flashcardId: string) {
+  try {
+    const doc = await getDocs(
+      collectionWithConverter<FlashcardPropsDisplay>(
+        db,
+        "decks",
+        deckId,
+        "flashcards",
+        flashcardId,
+        "props",
+      ),
+    );
+    return doc.docs.at(0)?.data();
+  } catch (error) {
+    console.log(
+      `There was an error retrieving the props for flashcard ${flashcardId}`,
+      error,
+    );
+  }
+}
+
+export async function patchFlashcardProps(
+  deckId: string,
+  flashcardId: string,
+  propId: string,
+  props: FlashcardProps,
+) {
+  try {
+    await updateDoc(
+      docWithConverter<FlashcardProps>(
+        db,
+        "decks",
+        deckId,
+        "flashcards",
+        flashcardId,
+        "props",
+        propId,
+      ),
+      props,
+    );
+  } catch (error) {
+    console.log(`There was an error patching the props for ${propId}`, error);
+  }
+}
+
+export async function addFlashcardLog(
+  deckId: string,
+  flashcardId: string,
+  propId: string,
+  log: FlashcardLog,
+) {
+  try {
+    await addDoc(
+      collectionWithConverter<FlashcardLog>(
+        db,
+        "decks",
+        deckId,
+        "flashcards",
+        flashcardId,
+        "props",
+        propId,
+        "logs",
+      ),
+      log,
+    );
+  } catch (error) {
+    console.log(`There was an error patching the props for ${propId}`, error);
   }
 }
 
