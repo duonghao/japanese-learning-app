@@ -1,16 +1,12 @@
 "use client";
 
-import { FlashcardDisplay } from "@/lib/firebase/types";
+import { WithId, Flashcard } from "@/lib/firebase/types";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const columns: ColumnDef<FlashcardDisplay>[] = [
+export const columns: ColumnDef<WithId<Flashcard>>[] = [
   {
     accessorKey: "word",
     header: "Word",
-  },
-  {
-    accessorKey: "definition",
-    header: "Definition",
   },
   {
     accessorKey: "id",

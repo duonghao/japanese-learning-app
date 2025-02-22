@@ -4,102 +4,60 @@ import {
   deleteDoc,
   doc,
   Firestore,
-  getDocs,
   onSnapshot,
+  query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "./clientApp";
-import {
-  Flashcard,
-  FlashcardDisplay,
-  Deck,
-  DeckDisplay,
-  FlashcardProps,
-  FlashcardPropsDisplay,
-  FlashcardLog,
-} from "./types";
+import { Deck, Flashcard, FlashcardLog, WithId, Word } from "./types";
 import { collectionWithConverter, docWithConverter } from "./utils";
 
 import { createEmptyCard } from "ts-fsrs";
 
-export async function addFlashcardToDeck(
+export async function addWordFlashcardToDeck(
   db: Firestore,
   deckId: string,
-  flashCard: Flashcard,
+  word: Word,
 ) {
   try {
-    const flashcardRef = await addDoc(
-      collectionWithConverter<Flashcard>(db, "decks", deckId, "flashcards"),
-      flashCard,
-    );
-
-    const props = createEmptyCard();
-
+    const fc = createEmptyCard();
     await addDoc(
-      collectionWithConverter<FlashcardProps>(
-        db,
-        "decks",
-        deckId,
-        "flashcards",
-        flashcardRef.id,
-        "props",
-      ),
-      props,
+      collectionWithConverter<Flashcard>(db, "decks", deckId, "flashcards"),
+      { ...fc, ...word },
     );
   } catch (error) {
     console.log("There was an error adding a flashcard.", error);
   }
 }
 
-export async function getFlashcardProps(deckId: string, flashcardId: string) {
-  try {
-    const doc = await getDocs(
-      collectionWithConverter<FlashcardPropsDisplay>(
-        db,
-        "decks",
-        deckId,
-        "flashcards",
-        flashcardId,
-        "props",
-      ),
-    );
-    return doc.docs.at(0)?.data();
-  } catch (error) {
-    console.log(
-      `There was an error retrieving the props for flashcard ${flashcardId}`,
-      error,
-    );
-  }
-}
-
-export async function patchFlashcardProps(
+export async function patchFlashcard(
   deckId: string,
   flashcardId: string,
-  propId: string,
-  props: FlashcardProps,
+  flashcard: Flashcard,
 ) {
   try {
     await updateDoc(
-      docWithConverter<FlashcardProps>(
+      docWithConverter<Flashcard>(
         db,
         "decks",
         deckId,
         "flashcards",
         flashcardId,
-        "props",
-        propId,
       ),
-      props,
+      flashcard,
     );
   } catch (error) {
-    console.log(`There was an error patching the props for ${propId}`, error);
+    console.log(
+      `There was an error patching the props for ${flashcardId}`,
+      error,
+    );
   }
 }
 
 export async function addFlashcardLog(
   deckId: string,
   flashcardId: string,
-  propId: string,
   log: FlashcardLog,
 ) {
   try {
@@ -110,23 +68,21 @@ export async function addFlashcardLog(
         deckId,
         "flashcards",
         flashcardId,
-        "props",
-        propId,
         "logs",
       ),
       log,
     );
   } catch (error) {
-    console.log(`There was an error patching the props for ${propId}`, error);
+    console.log(`There was an error add logs for ${flashcardId}`, error);
   }
 }
 
 export function getFlashcardsFromDeck(
   deckId: string,
-  cb: (flashcard: FlashcardDisplay[]) => void,
+  cb: (flashcard: WithId<Flashcard>[]) => void,
 ) {
   const unsub = onSnapshot(
-    collectionWithConverter<FlashcardDisplay>(
+    collectionWithConverter<WithId<Flashcard>>(
       db,
       "decks",
       deckId,
@@ -156,9 +112,10 @@ export async function addDeck(db: Firestore, deck: Deck) {
       deck,
     );
     for (let i = 0; i < 5; i++) {
+      const fc = createEmptyCard();
       await addDoc(collectionWithConverter<Flashcard>(docRef, "flashcards"), {
+        ...fc,
         word: "Hello",
-        definition: "Word",
       });
     }
     console.log(`Flashcard written with id: ${docRef.id}`);
@@ -167,7 +124,7 @@ export async function addDeck(db: Firestore, deck: Deck) {
   }
 }
 
-export function getDecks(cb: (flashcard: DeckDisplay[]) => void) {
+export function getDecks(cb: (flashcard: WithId<Deck>[]) => void) {
   const unsub = onSnapshot(collection(db, "decks"), (collection) => {
     const decks = collection.docs.map((doc) => {
       console.log(doc.data());
@@ -176,7 +133,7 @@ export function getDecks(cb: (flashcard: DeckDisplay[]) => void) {
         ...deck,
         id: doc.id,
       };
-    }) as unknown as DeckDisplay[];
+    }) as unknown as WithId<Deck>[];
     cb(decks);
   });
   return unsub;
@@ -184,13 +141,34 @@ export function getDecks(cb: (flashcard: DeckDisplay[]) => void) {
 
 export function getDeck(
   id: string,
-  cb: (deck: DeckDisplay | undefined) => void,
+  cb: (deck: WithId<Deck> | undefined) => void,
 ) {
   const unsub = onSnapshot(
-    docWithConverter<DeckDisplay>(db, "decks", id),
+    docWithConverter<WithId<Deck>>(db, "decks", id),
     (doc) => {
       const deck = doc.data();
       cb(deck);
+    },
+  );
+  return unsub;
+}
+
+export function getDueFlashcardsFromDeck(
+  deckId: string,
+  cb: (deck: WithId<Flashcard>[] | null) => void,
+) {
+  const unsub = onSnapshot(
+    query(
+      collectionWithConverter<WithId<Flashcard>>(
+        db,
+        "decks",
+        deckId,
+        "flashcards",
+      ),
+      where("due", "<", new Date()),
+    ),
+    (collection) => {
+      cb(collection.docs.map((doc) => doc.data()));
     },
   );
   return unsub;

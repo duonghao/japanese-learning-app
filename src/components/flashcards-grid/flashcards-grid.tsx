@@ -1,5 +1,3 @@
-import { FlashcardDisplay } from "@/lib/firebase/types";
-
 import { Row, Table } from "@tanstack/react-table";
 
 import {
@@ -8,18 +6,13 @@ import {
   DataGridPagination,
   DataGridToolbar,
 } from "@/components/data-grid/data-grid";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 import { columns } from "@/components/flashcards-grid/columns";
 import { Button } from "../ui/button";
 import { deleteFlashcardFromDeck } from "@/lib/firebase/firestore";
+import { Flashcard, WithId } from "@/lib/firebase/types";
 
 interface FlashcardsFiltersToolbarProps<TData> {
   table: Table<TData>;
@@ -51,7 +44,6 @@ function FlashcardCard<TData>({ row, deckId }: FlashcardCardProps<TData>) {
     <Card key={row.id}>
       <CardHeader>
         <CardTitle>{row.getValue("word")}</CardTitle>
-        <CardDescription>{row.getValue("definition")}</CardDescription>
       </CardHeader>
       <CardFooter className="flex justify-end">
         <Button
@@ -66,7 +58,7 @@ function FlashcardCard<TData>({ row, deckId }: FlashcardCardProps<TData>) {
 }
 
 interface FlashcardsGridProps {
-  flashcards: FlashcardDisplay[] | null;
+  flashcards: WithId<Flashcard>[] | null;
   deckId: string;
 }
 

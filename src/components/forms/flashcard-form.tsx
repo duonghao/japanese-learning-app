@@ -1,6 +1,11 @@
 "use client";
 
+import { useActionState } from "react";
+
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Form,
   FormControl,
@@ -9,12 +14,8 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
 import { createFlashcardInDeck } from "@/actions/handleFlashcardFormSubmit";
-import { useActionState } from "react";
 import { flashcardFormSchema } from "@/schemas";
 
 const initialState = {
@@ -34,7 +35,6 @@ export default function FlashcardForm(props: { deckId: string }) {
     resolver: zodResolver(flashcardFormSchema),
     defaultValues: {
       word: "",
-      definition: "",
     },
   });
 
@@ -49,21 +49,6 @@ export default function FlashcardForm(props: { deckId: string }) {
               <FormLabel>Word</FormLabel>
               <FormControl>
                 <Input placeholder="Cat" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        ></FormField>
-        <FormField
-          control={form.control}
-          name="definition"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Definition</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="A small domesticated carnivorous mammal..."
-                  {...field}
-                />
               </FormControl>
             </FormItem>
           )}

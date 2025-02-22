@@ -4,17 +4,17 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 import { getDeck } from "@/lib/firebase/firestore";
-import { DeckDisplay } from "@/lib/firebase/types";
 
 import FlashcardForm from "@/components/forms/flashcard-form";
 import Flashcards from "@/components/flashcards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Deck, WithId } from "@/lib/firebase/types";
 
 export default function DeckPage() {
   const { deckId } = useParams<{ deckId: string }>();
-  const [deck, setDeck] = useState<DeckDisplay | undefined>(undefined);
+  const [deck, setDeck] = useState<WithId<Deck> | undefined>(undefined);
 
   useEffect(() => {
     const unsub = getDeck(deckId, (deck) => setDeck(deck));

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 
 import { getFlashcardsFromDeck } from "@/lib/firebase/firestore";
-import { FlashcardDisplay } from "@/lib/firebase/types";
+import { Flashcard, WithId } from "@/lib/firebase/types";
 
 export function useFlashcards(deckId: string) {
-  const [flashcards, setFlashcards] = useState<FlashcardDisplay[] | null>(null);
+  const [flashcards, setFlashcards] = useState<WithId<Flashcard>[] | null>(
+    null,
+  );
 
   useEffect(() => {
     const unsub = getFlashcardsFromDeck(deckId, (flashcards) =>

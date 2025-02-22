@@ -1,6 +1,6 @@
 "use server";
 
-import { addFlashcardToDeck } from "@/lib/firebase/firestore";
+import { addWordFlashcardToDeck } from "@/lib/firebase/firestore";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
 import { flashcardFormSchema } from "@/schemas";
 import { initializeFirestore } from "firebase/firestore";
@@ -18,22 +18,19 @@ export async function createFlashcardInDeck(
 
   const validatedFields = flashcardFormSchema.safeParse({
     word: formData.get("word"),
-    definition: formData.get("definition"),
   });
 
   if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten().fieldErrors.definition);
     console.log(validatedFields.error.flatten().fieldErrors.word);
     return {
       message: "Failed to add flashcard!",
     };
   }
 
-  const { word, definition } = validatedFields.data;
+  const { word } = validatedFields.data;
 
-  await addFlashcardToDeck(db, context.deckId, {
+  await addWordFlashcardToDeck(db, context.deckId, {
     word,
-    definition,
   });
 
   return {
