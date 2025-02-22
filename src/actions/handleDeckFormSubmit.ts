@@ -1,11 +1,13 @@
 "use server";
 
-import { addDeck } from "@/lib/firebase/firestore";
+import { addDeck, patchDeck } from "@/lib/firebase/firestore";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
+import { fsrsParams } from "@/lib/fsrs/fsrs";
 import { deckFormSchema } from "@/schemas";
 import { getFirestore } from "firebase/firestore";
 
-export async function createDeck(
+export async function createOrUpdateDeck(
+  context: { deckId?: string },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   prevState: any,
   formData: FormData,
@@ -27,10 +29,20 @@ export async function createDeck(
 
   const { name, description, tag } = validatedFields.data;
 
+  if (context.deckId) {
+    await patchDeck(db, context.deckId, {
+      name,
+      description,
+      tag,
+    });
+    return { message: "Deck updated!" };
+  }
+
   await addDeck(db, {
-    name: name,
-    description: description,
-    tag: tag,
+    name,
+    description,
+    tag,
+    ...fsrsParams,
   });
 
   return {

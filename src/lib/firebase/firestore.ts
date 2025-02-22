@@ -4,6 +4,7 @@ import {
   deleteDoc,
   doc,
   Firestore,
+  getDoc,
   onSnapshot,
   query,
   updateDoc,
@@ -124,6 +125,30 @@ export async function addDeck(db: Firestore, deck: Deck) {
   }
 }
 
+export async function patchDeck(
+  db: Firestore,
+  deckId: string,
+  deck: Partial<Deck>,
+) {
+  try {
+    await updateDoc(docWithConverter<Deck>(db, "decks", deckId), deck);
+  } catch (error) {
+    console.log(`There was an error patching deck for ${deckId}`, error);
+  }
+}
+
+export async function getDeck(id: string) {
+  try {
+    const deck = await getDoc(docWithConverter<WithId<Deck>>(db, "decks", id));
+    return deck.data();
+  } catch (error) {
+    console.log(
+      `There was an error fetching deck information for ${id}`,
+      error,
+    );
+  }
+}
+
 export function getDecks(cb: (flashcard: WithId<Deck>[]) => void) {
   const unsub = onSnapshot(collection(db, "decks"), (collection) => {
     const decks = collection.docs.map((doc) => {
@@ -139,7 +164,7 @@ export function getDecks(cb: (flashcard: WithId<Deck>[]) => void) {
   return unsub;
 }
 
-export function getDeck(
+export function getDeckSub(
   id: string,
   cb: (deck: WithId<Deck> | undefined) => void,
 ) {

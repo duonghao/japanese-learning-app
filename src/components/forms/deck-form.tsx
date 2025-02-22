@@ -1,6 +1,6 @@
 import { useActionState } from "react";
 
-import { createDeck } from "@/actions/handleDeckFormSubmit";
+import { createOrUpdateDeck } from "@/actions/handleDeckFormSubmit";
 import { deckFormSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,21 +15,33 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Deck, WithId } from "@/lib/firebase/types";
 
 const initialState = {
   message: "",
 };
 
-export default function DeckForm() {
-  const [state, formAction, pending] = useActionState(createDeck, initialState);
+const initialFormValues = {
+  name: "",
+  description: "",
+  tag: "",
+};
+
+interface DeckFormProps {
+  deck?: WithId<Deck>;
+}
+export default function DeckForm({ deck }: DeckFormProps) {
+  const createOrUpdateDeckWithDeckID = createOrUpdateDeck.bind(null, {
+    deckId: deck?.id,
+  });
+  const [state, formAction, pending] = useActionState(
+    createOrUpdateDeckWithDeckID,
+    initialState,
+  );
 
   const form = useForm<z.infer<typeof deckFormSchema>>({
     resolver: zodResolver(deckFormSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      tag: "",
-    },
+    defaultValues: deck ? { ...deck } : initialFormValues,
   });
 
   return (

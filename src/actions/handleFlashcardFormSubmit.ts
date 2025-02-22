@@ -21,7 +21,7 @@ export async function createFlashcardInDeck(
   });
 
   if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten().fieldErrors.word);
+    // TODO: Handle errors
     return {
       message: "Failed to add flashcard!",
     };

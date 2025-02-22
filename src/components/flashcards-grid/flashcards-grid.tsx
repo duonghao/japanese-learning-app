@@ -46,7 +46,7 @@ interface FlashcardCardProps<TData> {
 }
 function FlashcardCard<TData>({ row, deckId }: FlashcardCardProps<TData>) {
   return (
-    <Card key={row.id}>
+    <Card>
       <CardHeader>
         <CardTitle>{row.getValue("word")}</CardTitle>
       </CardHeader>
@@ -83,7 +83,7 @@ export default function FlashcardsGrid({
         }}
       </DataGridToolbar>
       <DataGridContent>
-        {(row) => <FlashcardCard row={row} deckId={deckId} />}
+        {(row) => <FlashcardCard key={row.id} row={row} deckId={deckId} />}
       </DataGridContent>
       <DataGridPagination />
     </DataGrid>

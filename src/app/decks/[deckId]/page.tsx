@@ -1,26 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-
-import { getDeck } from "@/lib/firebase/firestore";
+import Link from "next/link";
 
 import FlashcardForm from "@/components/forms/flashcard-form";
 import Flashcards from "@/components/flashcards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Deck, WithId } from "@/lib/firebase/types";
+import SettingsTab from "@/components/tabs/settings-tab";
+import { useDeckContext } from "@/hooks/useDeckContext";
 
 export default function DeckPage() {
-  const { deckId } = useParams<{ deckId: string }>();
-  const [deck, setDeck] = useState<WithId<Deck> | undefined>(undefined);
-
-  useEffect(() => {
-    const unsub = getDeck(deckId, (deck) => setDeck(deck));
-
-    return unsub;
-  });
+  const { deckId, deck } = useDeckContext();
 
   return (
     <section className="p-4">
@@ -35,16 +25,20 @@ export default function DeckPage() {
           </Button>
         </ul>
       </header>
-      <Tabs defaultValue="flashcards">
-        <TabsList className="grid grid-cols-2 w-[400px]">
+      <Tabs defaultValue="settings">
+        <TabsList className="grid grid-cols-3 w-[400px]">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="flashcards">Flashcards</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
           <OverviewTab />
         </TabsContent>
         <TabsContent value="flashcards">
-          <FlashcardsTab deckId={deckId} />
+          <FlashcardsTab />
+        </TabsContent>
+        <TabsContent value="settings">
+          <SettingsTab />
         </TabsContent>
       </Tabs>
     </section>
@@ -57,11 +51,13 @@ function OverviewTab() {
   );
 }
 
-interface FlashcardsTabProps {
-  deckId: string;
-}
+function FlashcardsTab() {
+  const { deckId } = useDeckContext();
 
-function FlashcardsTab({ deckId }: FlashcardsTabProps) {
+  if (!deckId) {
+    return <></>;
+  }
+
   return (
     <div className="grid min-h-svh gap-4 grid-cols-2 rounded-xl border p-4">
       <div className="flex flex-1 items-center justify-center rounded-xl border">

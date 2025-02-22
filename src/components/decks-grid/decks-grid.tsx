@@ -79,7 +79,7 @@ interface DeckCardProps<TData> {
 }
 function DeckCard<TData>({ row }: DeckCardProps<TData>) {
   return (
-    <Card key={row.id}>
+    <Card>
       <CardHeader>
         <CardTitle>{row.getValue("name")}</CardTitle>
         <CardDescription>
@@ -112,7 +112,9 @@ export default function DecksGrid({ decks }: DecksGridProps) {
           );
         }}
       </DataGridToolbar>
-      <DataGridContent>{(row) => <DeckCard row={row} />}</DataGridContent>
+      <DataGridContent>
+        {(row) => <DeckCard key={row.id} row={row} />}
+      </DataGridContent>
       <DataGridPagination />
     </DataGrid>
   );

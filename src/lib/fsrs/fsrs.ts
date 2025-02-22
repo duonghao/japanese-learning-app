@@ -1,6 +1,6 @@
 import { FSRS, generatorParameters } from "ts-fsrs";
 
-const params = generatorParameters({ maximum_interval: 1000 });
-const f = new FSRS(params);
+const fsrsParams = generatorParameters({ maximum_interval: 1000 });
+const f = new FSRS(fsrsParams);
 
-export { f };
+export { f, fsrsParams };
