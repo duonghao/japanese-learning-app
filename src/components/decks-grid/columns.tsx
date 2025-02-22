@@ -1,9 +1,9 @@
 "use client";
 
-import { DeckDisplay } from "@/lib/firebase/types";
+import { Deck, WithId } from "@/lib/firebase/types";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const columns: ColumnDef<DeckDisplay>[] = [
+export const columns: ColumnDef<WithId<Deck>>[] = [
   {
     accessorKey: "name",
     header: "Name",

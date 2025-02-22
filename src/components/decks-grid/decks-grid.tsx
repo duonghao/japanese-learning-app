@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-import { DeckDisplay } from "@/lib/firebase/types";
-
 import { Row, Table } from "@tanstack/react-table";
 
 import {
@@ -32,6 +30,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { columns } from "@/components/decks-grid/columns";
+import { Deck, WithId } from "@/lib/firebase/types";
 
 function DecksActionsToolbar() {
   return (
@@ -98,7 +97,7 @@ function DeckCard<TData>({ row }: DeckCardProps<TData>) {
 }
 
 interface DecksGridProps {
-  decks: DeckDisplay[] | null;
+  decks: WithId<Deck>[] | null;
 }
 export default function DecksGrid({ decks }: DecksGridProps) {
   return (
