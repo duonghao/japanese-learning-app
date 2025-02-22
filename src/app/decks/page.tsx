@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 
 import { getDecks } from "@/lib/firebase/firestore";
-import { DeckDisplay } from "@/lib/firebase/types";
+import { WithId, Deck } from "@/lib/firebase/types";
 
 import DecksGrid from "@/components/decks-grid/decks-grid";
 
 export default function Decks() {
-  const [decks, setDecks] = useState<DeckDisplay[] | null>(null);
+  const [decks, setDecks] = useState<WithId<Deck>[] | null>(null);
 
   useEffect(() => {
     const unsub = getDecks((decks) => setDecks(decks));
