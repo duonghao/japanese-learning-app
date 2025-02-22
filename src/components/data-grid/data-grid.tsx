@@ -279,7 +279,6 @@ function DataGridFacetedFilter<TData, TValue>({
             <CommandGroup>
               {Array.from(facets?.keys() ?? []).map((facet) => {
                 const isSelected = selectedValues.has(facet);
-                console.log(facet);
                 return (
                   <CommandItem
                     key={facet}

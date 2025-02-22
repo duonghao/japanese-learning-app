@@ -3,6 +3,7 @@ import { Row, Table } from "@tanstack/react-table";
 import {
   DataGrid,
   DataGridContent,
+  DataGridFacetedFilter,
   DataGridPagination,
   DataGridToolbar,
 } from "@/components/data-grid/data-grid";
@@ -30,6 +31,10 @@ function FlashcardsFiltersToolbar<TData>({
           table.getColumn("word")?.setFilterValue(event.target.value)
         }
         className="max-w-sm"
+      />
+      <DataGridFacetedFilter
+        column={table.getColumn("state")}
+        title={"State"}
       />
     </div>
   );
