@@ -12,6 +12,7 @@ export function useFSRS(deckId: string) {
   const [flashcards, setFlashcards] = useState<WithId<Flashcard>[] | null>(
     null,
   );
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const current = flashcards?.at(0);
   const updateCurrent = async (grade: Grade) => {
@@ -29,9 +30,10 @@ export function useFSRS(deckId: string) {
   };
 
   useEffect(() => {
-    const unsub = getDueFlashcardsFromDeck(deckId, (flashcards) =>
-      setFlashcards(flashcards),
-    );
+    const unsub = getDueFlashcardsFromDeck(deckId, (flashcards) => {
+      setFlashcards(flashcards);
+      setIsLoaded(true);
+    });
 
     return unsub;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,6 +41,7 @@ export function useFSRS(deckId: string) {
 
   return {
     flashcards,
+    isLoaded,
     current,
     updateCurrent,
   };

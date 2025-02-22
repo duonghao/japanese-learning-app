@@ -1,15 +1,22 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useFSRS } from "@/hooks/useFSRS";
 
-import { useParams } from "next/navigation";
 import { Rating } from "ts-fsrs";
 
 export default function StartPage() {
   const { deckId } = useParams<{ deckId: string }>();
-  const { flashcards, updateCurrent } = useFSRS(deckId);
+  const { flashcards, updateCurrent, current, isLoaded } = useFSRS(deckId);
+  const router = useRouter();
+
+  if (!current && isLoaded) {
+    router.push(`/decks/${deckId}`);
+  }
 
   return (
     <div className="h-svh flex justify-center items-center relative flex-direction: column-reverse">
@@ -26,7 +33,7 @@ export default function StartPage() {
           </CardContent>
         </Card>
       ))}
-      <div className="flex gap-4 absolute top-[70%]">
+      <div className="flex gap-4 absolute top-[40%]">
         <Button onClick={() => updateCurrent(Rating.Again)}>Again</Button>
         <Button onClick={() => updateCurrent(Rating.Easy)}>Easy</Button>
         <Button onClick={() => updateCurrent(Rating.Good)}>Good</Button>
