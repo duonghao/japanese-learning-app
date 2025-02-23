@@ -2,7 +2,7 @@
 
 import { addDeck, patchDeck } from "@/lib/firebase/firestore";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
-import { fsrsParams } from "@/lib/fsrs/fsrs";
+import { initialParams } from "@/lib/fsrs/fsrs";
 import { deckFormSchema } from "@/schemas";
 import { getFirestore } from "firebase/firestore";
 
@@ -42,7 +42,7 @@ export async function createOrUpdateDeck(
     name,
     description,
     tag,
-    ...fsrsParams,
+    ...initialParams,
   });
 
   return {
