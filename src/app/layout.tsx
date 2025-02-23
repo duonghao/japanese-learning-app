@@ -1,8 +1,12 @@
+import { ReactNode } from "react";
+
 import type { Metadata } from "next";
 import "./globals.css";
+
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
+
 import Header from "@/components/header/header";
-import { ReactNode } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,7 +24,8 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <Header initialUser={currentUser} />
-        {children}
+        <main>{children}</main>
+        <Toaster />
       </body>
     </html>
   );

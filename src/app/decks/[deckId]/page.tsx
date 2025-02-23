@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 
-import FlashcardForm from "@/components/forms/flashcard-form";
 import Flashcards from "@/components/flashcards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -59,15 +58,8 @@ function FlashcardsTab() {
   }
 
   return (
-    <div className="grid min-h-svh gap-4 grid-cols-2 rounded-xl border p-4">
-      <div className="flex flex-1 items-center justify-center rounded-xl border">
-        <div className="w-full max-w-xs">
-          <FlashcardForm deckId={deckId} />
-        </div>
-      </div>
-      <div className="rounded-xl border p-4">
-        <Flashcards deckId={deckId} />
-      </div>
+    <div className="min-h-svh rounded-xl border p-4">
+      <Flashcards deckId={deckId} />
     </div>
   );
 }

@@ -9,16 +9,47 @@ import {
 } from "@/components/data-grid/data-grid";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 import { columns } from "@/components/flashcards-grid/columns";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { deleteFlashcardFromDeck } from "@/lib/firebase/firestore";
 import { Flashcard, WithId } from "@/lib/firebase/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import FlashcardForm from "@/components/forms/flashcard-form";
+
+interface FlashcardActionToolbarProps {
+  deckId: string;
+}
+function FlashcardsActionsToolbar({ deckId }: FlashcardActionToolbarProps) {
+  return (
+    <div className="flex items-center gap-4">
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="default">Add</Button>
+        </DialogTrigger>
+        <DialogContent className="min-w-[90%] min-h-[90%] pt-12">
+          <VisuallyHidden asChild>
+            <DialogHeader>
+              <DialogTitle>Add a flashcard</DialogTitle>
+            </DialogHeader>
+          </VisuallyHidden>
+          <FlashcardForm deckId={deckId} />
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
 
 interface FlashcardsFiltersToolbarProps<TData> {
   table: Table<TData>;
 }
-
 function FlashcardsFiltersToolbar<TData>({
   table,
 }: FlashcardsFiltersToolbarProps<TData>) {
@@ -78,6 +109,7 @@ export default function FlashcardsGrid({
           return (
             <div className="flex justify-between pb-4">
               <FlashcardsFiltersToolbar table={table} />
+              <FlashcardsActionsToolbar deckId={deckId} />
             </div>
           );
         }}
